@@ -19,13 +19,39 @@ def get_listings_from_search_results(html_file):
         https://www.airbnb.com/rooms/1944564
     the listing id is 1944564.
 .
+    
 
     [
         ('Title of Listing 1', 'Cost 1', 'Listing ID 1'),  # format
         ('Loft in Mission District', 210, '1944564'),  # example
     ]
     """
-    pass
+    f = open(html_file, 'r')
+    my_str = f.read()
+    f.close()
+    
+    soup = BeautifulSoup(my_str, 'html.parser')
+
+    title_tag = soup.find_all('div', class_='t1jojoys dir dir-ltr')
+    title_list = []
+    for title in title_tag:
+        title_list.append(title.text.strip())
+    print(title_list)
+
+    price_tag = soup.find_all('span', class_='_tyxjp1')
+    price_list = []
+    for price in price_tag:
+        price_list.append(price.text.strip('$'))
+
+    ids = str(soup.find_all('a', class_='ln2bl2p dir dir-ltr'))
+    id_list = re.findall('\d{7}', ids)
+
+    endList = []
+    for i in range(len(title_tag)):
+         tup=(title_list[i], price_list[i], id_list[i])
+         endList.append(tup)
+    #print(endList)
+    return endList
 
 
 def get_listing_information(listing_id):
@@ -243,3 +269,5 @@ if __name__ == '__main__':
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
     unittest.main(verbosity=2)
+
+    get_listings_from_search_results("html_files/mission_district_search_results.html")
