@@ -175,10 +175,10 @@ def write_csv(data, filename):
     heading_line = ['Listing Title','Cost','Listing ID','Policy Number','Place Type','Number of Bedrooms']
     writer.writerow(heading_line)
    
-    sort_list = sorted(data, key = lambda t: t[1])
+    sorted_list = sorted(data, key = lambda t: t[1])
     #print(sort_list)
 
-    for line in sort_list:
+    for line in sorted_list:
         writer.writerow(line)
 
     newFile.close()
